@@ -1,5 +1,5 @@
 package com.brunomartinsoliveira.agregadorinvestimentos.controller;
-
+import com.brunomartinsoliveira.agregadorinvestimentos.dto.UpdateUserDto;
 import com.brunomartinsoliveira.agregadorinvestimentos.dto.CreateUserDto;
 import com.brunomartinsoliveira.agregadorinvestimentos.service.UserService;
 import com.brunomartinsoliveira.agregadorinvestimentos.entity.User;
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -21,10 +20,10 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<org.apache.catalina.User> createUser(@RequestBody CreateUserDto createUserDto) {
+    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto) {
         var userId = userService.createUser(createUserDto);
 
-        return ResponseEntity.created(URI.create("/v1/users/" + userId)).build();
+        return ResponseEntity.created(URI.create("/v1/users/" + userId.toString())).build();
     }
 
     @GetMapping("/{userId}")
@@ -43,5 +42,18 @@ public class UserController {
         var users = userService.listUsers();
 
         return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUserById(@PathVariable("userId") String userId,
+                                               @RequestBody UpdateUserDto updateUserDto) {
+        userService.updateUserById(userId, updateUserDto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId) {
+        userService.deleteById(userId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -12,6 +12,8 @@ import java.util.UUID;
 @Table(name = "tb_users")
 public class User {
 
+    private final Instant createdAt;
+    private final Instant updatedAt;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
@@ -32,18 +34,28 @@ public class User {
     @UpdateTimestamp
     private Instant updateTimestamp;
 
-    // Construtor padrão para o JPA
-    public User() {
+    public User(Instant createdAt, Instant updatedAt) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    // Construtor usado para criar novos usuários
-    public User(String username, String email, String password) {
+    public User(Instant createdAt, Instant updatedAt, String username, String email, String password) {
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    // Getters e Setters
+    public User(UUID userId, String username, String email, String password, Instant createdAt, Instant updatedAt) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public UUID getUserId() {
         return userId;
     }
