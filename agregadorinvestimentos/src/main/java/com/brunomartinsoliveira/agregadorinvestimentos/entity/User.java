@@ -1,4 +1,6 @@
 package com.brunomartinsoliveira.agregadorinvestimentos.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,32 +16,34 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password")
+    @JsonIgnore
+    @Column(name = "password", nullable = false)
     private String password;
 
     @CreationTimestamp
     private Instant creationTimestamp;
+
     @UpdateTimestamp
     private Instant updateTimestamp;
 
+    // Construtor padrão para o JPA
     public User() {
     }
 
-    public User(UUID userId, String username, String email, String password, Instant creationTimestamp, Instant updateTimestamp) {
-        this.userId = userId;
+    // Construtor usado para criar novos usuários
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.creationTimestamp = creationTimestamp;
-        this.updateTimestamp = updateTimestamp;
     }
 
+    // Getters e Setters
     public UUID getUserId() {
         return userId;
     }
